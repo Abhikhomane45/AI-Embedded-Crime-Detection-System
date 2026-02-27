@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: process.env.GOOGLE_MAPS_API_KEY,
+  apiKey: "AIzaSyCO9_geqZzJuPDpumDShDZpyVPYKzZnrS4",
   authDomain: "crime-detection-system-734c6.firebaseapp.com",
   projectId: "crime-detection-system-734c6",
   storageBucket: "crime-detection-system-734c6.firebasestorage.app",
