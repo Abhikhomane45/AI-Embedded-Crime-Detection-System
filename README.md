@@ -13,6 +13,21 @@ A highly advanced, AI-powered crime detection and surveillance network. This sys
 
 ---
 
+## 📸 Dashboard Overview
+
+*(Note: Please save the images you provided into a folder named `assets/` in your repository root with the filenames below, or update the paths to match where you upload them!)*
+
+### 1. Tactical Surveillance Feed
+![Surveillance Overview](./assets/surveillance-feed.png)
+
+### 2. Deep Image Telemetry Analysis
+![Image Analysis](./assets/image-analysis.png)
+
+### 3. Incident Management & Logs
+![Operator Dashboard](./assets/operator-dashboard.png)
+
+---
+
 ## 🏗️ System Architecture
 
 The project utilizes a distinct microservices architecture split into three main components:
