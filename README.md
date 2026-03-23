@@ -119,6 +119,11 @@ REACT_APP_FIREBASE_CONFIG=your_firebase_config
 DATABASE_URL=your_database_url
 JWT_SECRET=your_jwt_secret
 AI_SERVER_URL=your_ai_server_url
+
+# cloudinary credentials used for image uploads (required when reporting incidents)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
 ### AI Server (.env)
@@ -181,4 +186,4 @@ For support, please open an issue in the GitHub repository or contact the mainta
 
 ---
 
-**Note**: This system is designed for educational and research purposes. Ensure compliance with local laws and regulations when deploying in production environments.
+**Note**: This system is designed for educational and research purposes. Ensure compliance with local laws and regulations when deploying in production environments.# AI-Embedded-Crime-Detection-System
