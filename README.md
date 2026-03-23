@@ -115,9 +115,9 @@ This system natively supports ESP32 microcontrollers for streaming.
 
 ---
 
-## 🧑‍💻 Author
-**Abhijeet Khomane**
-*   GitHub: [@Abhikhomane45](https://github.com/Abhikhomane45)
+## 🧑‍💻 Authors & Contributors
+*   **Abhijeet Khomane** — GitHub: [@Abhikhomane45](https://github.com/Abhikhomane45)
+*   **Shubham Gavade** — Project Building and Development Contributions
 
 ## 📄 License
 This system is licensed under the MIT License. Designed for rapid deployment in smart-city infrastructure and localized security grids. Ensure compliance with regional surveillance privacy laws.
