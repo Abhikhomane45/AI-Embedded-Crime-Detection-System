@@ -1,142 +1,160 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --surface: #ffffff;
-  --surface-muted: #f8fafc;
-  --border: #e5e7eb;
-  --accent: #0ea5a6;
-  --accent-2: #0284c7;
-  --muted: #64748b;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
   --font-sans: var(--font-sora);
   --font-mono: var(--font-jetbrains-mono);
 }
 
+:root {
+  --background: #09090b; /* zinc-950 */
+  --foreground: #f8fafc; /* slate-50 */
+  --surface: rgba(24, 24, 27, 0.6); /* zinc-900 with opacity */
+  --surface-muted: rgba(39, 39, 42, 0.4); /* zinc-800 with opacity */
+  --border: rgba(63, 63, 70, 0.5); /* zinc-700 with opacity */
+  --accent: #06b6d4; /* cyan-500 */
+  --accent-glow: rgba(6, 182, 212, 0.4);
+  --critical: #f43f5e; /* rose-500 */
+  --critical-glow: rgba(244, 63, 94, 0.4);
+  --secure: #10b981; /* emerald-500 */
+  --secure-glow: rgba(16, 185, 129, 0.4);
+  --ai: #a855f7; /* purple-500 */
+  --ai-glow: rgba(168, 85, 247, 0.4);
+}
+
 body {
-  background: linear-gradient(180deg, #ffffff, #f8fafc);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), "Segoe UI", sans-serif;
   min-height: 100vh;
+  /* Add a subtle tech grid background */
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-attachment: fixed;
 }
 
 @layer base {
   * {
     box-sizing: border-box;
   }
-
-  h1,
-  h2,
-  h3,
-  h4 {
+  h1, h2, h3, h4 {
     letter-spacing: -0.02em;
   }
 }
 
 @layer components {
   .app-shell {
-    @apply min-h-screen text-slate-900;
+    @apply min-h-screen text-slate-100 flex flex-col;
   }
 
-  .app-card {
-    @apply rounded-2xl border border-slate-200/80 bg-white/90 shadow-sm backdrop-blur-sm;
+  /* Glassmorphism Cards */
+  .glass-panel {
+    @apply rounded-2xl border border-zinc-800 bg-zinc-900/40 backdrop-blur-xl shadow-lg;
   }
 
-  .app-panel {
-    @apply rounded-xl border border-slate-200/70 bg-slate-50/70;
+  .glass-card {
+    @apply rounded-xl border border-zinc-800/80 bg-zinc-900/60 backdrop-blur-md shadow-md transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-800/60;
+  }
+  
+  .glass-input {
+    @apply w-full rounded-xl border border-zinc-700 bg-zinc-900/50 px-4 py-3 text-slate-100 placeholder:text-zinc-500 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 backdrop-blur-sm transition-all;
   }
 
-  .app-badge {
-    @apply inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600;
+  .glass-button {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-700 bg-zinc-800/80 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:border-zinc-600 hover:bg-zinc-700 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 backdrop-blur-md;
   }
 
-  .app-input {
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/50;
+  .glass-button-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-500/50 bg-cyan-600/20 px-4 py-2 text-sm font-semibold text-cyan-50 shadow-[0_0_15px_rgba(6,182,212,0.2)] transition-all hover:bg-cyan-500/30 hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:border-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 backdrop-blur-md;
+  }
+  
+  .glass-button-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-500/50 bg-rose-600/20 px-4 py-2 text-sm font-semibold text-rose-50 shadow-[0_0_15px_rgba(244,63,94,0.2)] transition-all hover:bg-rose-500/30 hover:shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:border-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/50 backdrop-blur-md;
   }
 
-  .app-button {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-slate-950 to-slate-800 px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/50;
+  .tech-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-900/80 px-3 py-1 text-[11px] font-medium tracking-wider uppercase text-zinc-300 backdrop-blur-md;
   }
 
-  .app-button-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300/60;
+  /* Surveillance Scanline overlay */
+  .scanlines {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0) 50%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(0, 0, 0, 0.1)
+    );
+    background-size: 100% 4px;
+    z-index: 10;
+    pointer-events: none;
   }
 }
 
 @layer utilities {
+  .text-glow-cyan {
+    text-shadow: 0 0 10px var(--accent-glow);
+  }
+  .text-glow-rose {
+    text-shadow: 0 0 10px var(--critical-glow);
+  }
+  
   .map-premium .leaflet-container {
     border-radius: 16px;
+    border: 1px solid rgba(63, 63, 70, 0.8);
   }
-
-  .map-premium .leaflet-tile {
-    filter: saturate(0.85) contrast(1.05) brightness(0.98);
+  
+  /* Make map dark natively using CSS filters if using light tiles, or just style the container */
+  .map-premium .leaflet-tile-pane {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
   }
 
   .map-premium .incident-marker {
-    width: 42px;
-    height: 42px;
+    width: 24px;
+    height: 24px;
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
     font-weight: 700;
-    font-size: 14px;
-    background: radial-gradient(circle at top, #ff4d4d, #b91c1c);
-    box-shadow: 0 0 0 6px rgba(255, 0, 0, 0.12), 0 18px 40px rgba(0, 0, 0, 0.3);
+    font-size: 10px;
+    background: #f43f5e;
+    box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.2), 0 0 15px rgba(244, 63, 94, 0.6);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   .map-premium .incident-marker:hover {
-    transform: scale(1.06);
-    box-shadow: 0 0 0 8px rgba(255, 0, 0, 0.16), 0 22px 45px rgba(0, 0, 0, 0.35);
+    transform: scale(1.2);
+    box-shadow: 0 0 0 6px rgba(244, 63, 94, 0.3), 0 0 25px rgba(244, 63, 94, 0.8);
   }
 
   .map-premium .incident-marker--low {
-    background: radial-gradient(circle at top, #38bdf8, #2563eb);
-    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.16), 0 18px 40px rgba(0, 0, 0, 0.25);
+    background: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2), 0 0 15px rgba(59, 130, 246, 0.6);
   }
 
   .map-premium .incident-marker--medium {
-    background: radial-gradient(circle at top, #f59e0b, #b45309);
-    box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.16), 0 18px 40px rgba(0, 0, 0, 0.25);
+    background: #f59e0b;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2), 0 0 15px rgba(245, 158, 11, 0.6);
   }
 
   .map-premium .incident-marker--high,
   .map-premium .incident-marker--critical {
-    animation: incidentPulse 3s infinite;
-  }
-
-  .map-premium .threat-radius {
-    animation: threatPulse 3s infinite;
-  }
-
-  .map-premium .threat-radius--high {
-    animation: threatPulse 3s infinite;
+    animation: incidentPulse 2s infinite;
   }
 
   @keyframes incidentPulse {
     0% {
-      box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4), 0 18px 40px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.6), 0 0 10px rgba(244, 63, 94, 0.5);
     }
     100% {
-      box-shadow: 0 0 0 18px rgba(255, 0, 0, 0), 0 18px 40px rgba(0, 0, 0, 0.3);
-    }
-  }
-
-  @keyframes threatPulse {
-    0% {
-      opacity: 0.7;
-      transform: scale(0.98);
-    }
-    100% {
-      opacity: 0.2;
-      transform: scale(1.05);
+      box-shadow: 0 0 0 20px rgba(244, 63, 94, 0), 0 0 30px rgba(244, 63, 94, 0);
     }
   }
 }

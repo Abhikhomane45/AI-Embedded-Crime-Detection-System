@@ -28,7 +28,7 @@ export default function DashboardRouter() {
   }, [router]);
 
   return (
-    <div className="app-shell flex items-center justify-center">
+    <div className="app-shell flex items-center justify-center" suppressHydrationWarning>
       <p className="text-slate-600">Redirecting...</p>
     </div>
   );

@@ -75,7 +75,7 @@ export default function Login() {
   };
 
   return (
-    <div className="app-shell flex items-center justify-center p-4">
+    <div className="app-shell flex items-center justify-center p-4" suppressHydrationWarning>
       <div className="w-full max-w-lg app-card p-8 lg:p-12">
         <div className="max-w-md mx-auto">
               <div className="text-center mb-8">
@@ -95,6 +95,7 @@ export default function Login() {
                         ? "bg-white shadow text-slate-900"
                         : "hover:bg-white/70"
                     }`}
+                    suppressHydrationWarning
                   >
                     <Shield className="w-4 h-4" />
                     <span>Admin</span>
@@ -107,6 +108,7 @@ export default function Login() {
                         ? "bg-white shadow text-slate-900"
                         : "hover:bg-white/70"
                     }`}
+                    suppressHydrationWarning
                   >
                     <User className="w-4 h-4" />
                     <span>Operator</span>
@@ -138,6 +140,7 @@ export default function Login() {
                       className="app-input pl-10"
                       placeholder="Enter your email"
                       required
+                      suppressHydrationWarning
                     />
                   </div>
                 </div>
@@ -157,6 +160,7 @@ export default function Login() {
                       className="app-input pl-10"
                       placeholder="Enter your password"
                       required
+                      suppressHydrationWarning
                     />
                   </div>
                 </div>
@@ -165,6 +169,7 @@ export default function Login() {
                   type="submit"
                   disabled={loading}
                   className="app-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                  suppressHydrationWarning
                 >
                   {loading ? (
                     <div className="flex items-center justify-center">

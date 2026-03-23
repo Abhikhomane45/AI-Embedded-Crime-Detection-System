@@ -1,189 +1,108 @@
-# Crime Detection System 🔍🚨
+# AI-Embedded Crime Detection System 🛡️👁️‍🗨️
 
-A comprehensive crime detection and monitoring system powered by artificial intelligence and real-time data processing.
+A highly advanced, AI-powered crime detection and surveillance network. This system is designed to provide real-time Threat Level tracking, anomaly detection, and automated incident reporting through a multi-node camera network, utilizing a sleek, high-tech "command center" interface.
 
-## 📋 Overview
+## 🚀 Key Features
 
-The Crime Detection System is a full-stack application designed to detect, analyze, and report criminal activities using advanced AI/ML algorithms. The system integrates multiple components including an AI server for intelligent detection, a robust backend for data management, and an intuitive frontend for user interaction.
-
-## 🏗️ Architecture
-
-This project follows a microservices architecture with the following components:
-
-```
-CrimeDetectionSystem/
-├── ai-server/          # AI/ML models and detection algorithms
-├── backend/            # Backend API and business logic
-├── frontend/           # User interface and client application
-├── functions/          # Firebase Cloud Functions
-└── firebase.json       # Firebase configuration
-```
-
-### Components
-
-- **AI Server**: Handles machine learning models for crime pattern detection, video analysis, and predictive analytics
-- **Backend**: RESTful API server managing data persistence, authentication, and business logic
-- **Frontend**: User-facing web application for monitoring, reporting, and analytics visualization
-- **Functions**: Serverless functions for event-driven tasks and integrations
-
-## 🚀 Features
-
-- Real-time crime detection and alerts
-- AI-powered video surveillance analysis
-- Crime pattern recognition and prediction
-- Interactive dashboard with analytics
-- User authentication and role-based access
-- Report generation and case management
-- Geographic crime mapping
-- Multi-channel notifications
-
-## 🛠️ Technology Stack
-
-### Frontend
-- Modern JavaScript framework
-- Responsive UI design
-- Real-time data visualization
-
-### Backend
-- RESTful API architecture
-- Secure authentication system
-- Database integration
-
-### AI Server
-- Machine learning models
-- Computer vision capabilities
-- Pattern recognition algorithms
-
-### Infrastructure
-- Firebase for hosting and functions
-- Cloud-based deployment
-- Scalable architecture
-
-## 📦 Installation
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm or yarn
-- Firebase CLI
-- Python (for AI server)
-
-### Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/ShubhamG2004/CrimeDetectionSystem.git
-   cd CrimeDetectionSystem
-   ```
-
-2. **Frontend Setup**
-   ```bash
-   cd frontend
-   npm install
-   npm start
-   ```
-
-3. **Backend Setup**
-   ```bash
-   cd backend
-   npm install
-   npm run dev
-   ```
-
-4. **AI Server Setup**
-   ```bash
-   cd ai-server
-   pip install -r requirements.txt
-   python app.py
-   ```
-
-5. **Firebase Functions**
-   ```bash
-   cd functions
-   npm install
-   firebase deploy --only functions
-   ```
-
-## ⚙️ Configuration
-
-Create environment configuration files for each component:
-
-### Frontend (.env)
-```
-REACT_APP_API_URL=your_backend_url
-REACT_APP_FIREBASE_CONFIG=your_firebase_config
-```
-
-### Backend (.env)
-```
-DATABASE_URL=your_database_url
-JWT_SECRET=your_jwt_secret
-AI_SERVER_URL=your_ai_server_url
-
-# cloudinary credentials used for image uploads (required when reporting incidents)
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-```
-
-### AI Server (.env)
-```
-MODEL_PATH=path_to_models
-PORT=5000
-```
-
-## 🧪 Testing
-
-```bash
-# Frontend tests
-cd frontend
-npm test
-
-# Backend tests
-cd backend
-npm test
-
-# AI Server tests
-cd ai-server
-pytest
-```
-
-## 📈 Usage
-
-1. **User Registration/Login**: Create an account or sign in to access the system
-2. **Dashboard**: View real-time crime statistics and alerts
-3. **Report Incident**: Submit crime reports with details and evidence
-4. **Monitor**: Access live surveillance feeds with AI detection
-5. **Analytics**: Review crime patterns and predictive insights
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👨‍💻 Author
-
-**Shubham Gupta**
-- GitHub: [@ShubhamG2004](https://github.com/ShubhamG2004)
-
-## 📞 Support
-
-For support, please open an issue in the GitHub repository or contact the maintainer.
-
-## 🙏 Acknowledgments
-
-- Thanks to all contributors who have helped shape this project
-- Special acknowledgment to the open-source community for tools and libraries used
+*   **Real-time AI Video Surveillance:** Deep pose estimation via YOLOv8 to detect violence (punches, kicks, falls, weapons).
+*   **High-Tech Command Center UI:** A stunning, immersive dark-mode grid aesthetic utilizing Glassmorphism, neon highlights, and Framer Motion animations.
+*   **Live Node Telemetry:** Connects seamlessly with ESP32-CAM networks for direct IP stream ingestion.
+*   **Automated Incident Queue:** Anomalous events are captured instantly and pushed to the operator dashboard with auto-calculated Threat Levels and Risk Indices.
+*   **Geographic Fleet Tracking:** Interactive radar maps to monitor active and offline camera nodes globally via Leaflet.
+*   **Role-Based Access Control:** Secure Admin vs. Operator views via Firebase Authentication.
 
 ---
 
-**Note**: This system is designed for educational and research purposes. Ensure compliance with local laws and regulations when deploying in production environments.# AI-Embedded-Crime-Detection-System
+## 🏗️ System Architecture
+
+The project utilizes a distinct microservices architecture split into three main components:
+
+```text
+AI-Embedded-Crime-Detection-System/
+├── frontend/           # Next.js Command Center User Interface
+├── backend/            # Node.js/Express API & Firebase Realtime DB bridging
+└── ai-server/          # Python AI inference engine (YOLOv8 & OpenCV)
+```
+
+### 1. Frontend (Command Center GUI)
+Built for rapid situational awareness. The frontend acts as the operator's primary HUD (Heads Up Display).
+*   **Framework:** Next.js (React)
+*   **Styling:** Tailwind CSS (Custom Dark HUD Theme), Framer Motion, Lucide Icons
+*   **Mapping & Charts:** React-Leaflet, Recharts
+
+### 2. Backend (Node API Server)
+The secure middle-layer funneling telemetry and data storage.
+*   **Framework:** Node.js, Express.js
+*   **Database:** Firebase Firestore & Firebase Auth
+*   **Features:** Hardware node provisioning, image handling, JWT processing
+
+### 3. AI Server (Nexus Detection Engine)
+The computational brain analyzing visual inputs.
+*   **Framework:** Python, Flask, OpenCV
+*   **Models:** Ultralytics YOLOv8 pose-estimation networks
+*   **Capabilities:** Frame-by-frame live analysis and standalone high-resolution image telemetry scanning.
+
+---
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
+*   Node.js (v18+)
+*   Python 3.10+
+*   Firebase Account credentials
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Abhikhomane45/AI-Embedded-Crime-Detection-System.git
+cd AI-Embedded-Crime-Detection-System
+```
+
+### 2. Frontend Configuration
+```bash
+cd frontend
+npm install
+```
+Create a `.env.local` inside `/frontend` with your Firebase config:
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY="your_api_key"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your_domain"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="your_project_id"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your_bucket"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your_sender_id"
+NEXT_PUBLIC_FIREBASE_APP_ID="your_app_id"
+```
+Run Server: `npm run dev`
+
+### 3. Backend Configuration
+```bash
+cd backend
+npm install
+```
+Place your Firebase Admin SDK service account key as `serviceAccountKey.json` inside the `backend` folder.
+Run Server: `npm run dev` (Runs on Port 5000)
+
+### 4. AI Server Configuration
+```bash
+cd ai-server
+pip install -r requirements.txt
+```
+Run AI Engine: `python image_detector.py` (Runs on Port 8000)
+
+*Note: The YOLOv8 `.pt` models are tracked via Git LFS due to size.*
+
+---
+
+## 📡 Hardware Integration (ESP32-CAM)
+This system natively supports ESP32 microcontrollers for streaming.
+1. Flash the ESP32-CAM with a standard HTTP MJPEG stream sketch.
+2. In the Admin Dashboard `> Cameras`, map the node with its IP.
+3. Live feeds will instantly appear in the `Surveillance Center` with continuous AI tracking logic applied.
+
+---
+
+## 🧑‍💻 Author
+**Abhijeet Khomane**
+*   GitHub: [@Abhikhomane45](https://github.com/Abhikhomane45)
+
+## 📄 License
+This system is licensed under the MIT License. Designed for rapid deployment in smart-city infrastructure and localized security grids. Ensure compliance with regional surveillance privacy laws.

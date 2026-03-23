@@ -12,8 +12,9 @@ class PoseCrimeDetector:
         self.max_history = 5
         
     def analyze(self, image):
-        # Process with higher resolution for better keypoint accuracy
-        results = self.model(image, conf=0.5, iou=0.45, verbose=False)[0]
+        # Process with lower confidence threshold for better detection
+        # Lower conf = more detections (more sensitive)
+        results = self.model(image, conf=0.3, iou=0.45, verbose=False)[0]
         
         if results.keypoints is None or len(results.keypoints) == 0:
             return self._empty_result()

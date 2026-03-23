@@ -27,11 +27,13 @@ import {
   Search,
   MoreVertical,
   Download,
-  Eye
+  Eye,
+  Activity
 } from "lucide-react";
 
 import Navbar from "@/components/Navbar";
 import OperatorSidebar from "@/components/OperatorSidebar";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function OperatorDashboard() {
   const router = useRouter();
@@ -51,6 +53,10 @@ export default function OperatorDashboard() {
     low: 0,
   });
   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   /* ---------- AUTH GUARD ---------- */
   useEffect(() => {
@@ -80,49 +86,41 @@ export default function OperatorDashboard() {
   }, [router]);
 
   /* ---------- FETCH INCIDENTS ---------- */
-  /* ---------- FETCH INCIDENTS (FIXED & SECURE) ---------- */
-useEffect(() => {
-  if (!operatorCameras || operatorCameras.length === 0) return;
+  useEffect(() => {
+    if (!operatorCameras || operatorCameras.length === 0) return;
 
-  const fetchIncidents = async () => {
-    try {
-      setLoading(true);
+    const fetchIncidents = async () => {
+      try {
+        setLoading(true);
 
-      /**
-       * Firestore limitation:
-       * "in" query supports max 10 values.
-       * If you ever assign >10 cameras, we’ll chunk later.
-       */
-      const q = query(
-        collection(db, "incidents"),
-        orderBy("createdAt", "desc"),
-        where("location.cameraId", "in", operatorCameras)
-      );
+        const q = query(
+          collection(db, "incidents"),
+          orderBy("createdAt", "desc"),
+          where("location.cameraId", "in", operatorCameras)
+        );
 
-      const snap = await getDocs(q);
+        const snap = await getDocs(q);
 
-      const list = snap.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || null,
-        };
-      });
+        const list = snap.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            createdAt: data.createdAt?.toDate() || null,
+          };
+        });
 
-      setIncidents(list);
-      calculateStats(list);
-    } catch (err) {
-      console.error("❌ Fetch incidents error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setIncidents(list);
+        calculateStats(list);
+      } catch (err) {
+        console.error("❌ Fetch incidents error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchIncidents();
-}, [operatorCameras]);
-
-
+    fetchIncidents();
+  }, [operatorCameras]);
 
   /* ---------- STATS ---------- */
   const calculateStats = (list) => {
@@ -162,8 +160,7 @@ useEffect(() => {
         i.threat_level?.toLowerCase().includes(searchQuery.toLowerCase());
 
       return cameraMatch && severityMatch && searchMatch;
-    });
-
+  });
 
   /* ---------- HELPERS ---------- */
   const formatDate = (date) => {
@@ -195,48 +192,53 @@ useEffect(() => {
     switch (lvl) {
       case "CRITICAL":
         return {
-          color: "bg-gradient-to-r from-red-500 to-red-600",
-          text: "text-red-700",
-          bg: "bg-red-50",
-          icon: <ShieldAlert className="w-4 h-4" />,
-          label: "Critical",
-          border: "border-red-200"
+          color: "text-rose-500",
+          bg: "bg-rose-950/40",
+          icon: <ShieldAlert className="w-5 h-5" />,
+          label: "CRITICAL",
+          border: "border-rose-500/50",
+          fill: "bg-rose-500",
+          shadow: "shadow-[0_0_15px_rgba(244,63,94,0.4)]"
         };
       case "HIGH":
         return {
-          color: "bg-gradient-to-r from-orange-500 to-orange-600",
-          text: "text-orange-700",
-          bg: "bg-orange-50",
-          icon: <AlertTriangle className="w-4 h-4" />,
-          label: "High",
-          border: "border-orange-200"
+          color: "text-orange-500",
+          bg: "bg-orange-950/40",
+          icon: <AlertTriangle className="w-5 h-5" />,
+          label: "HIGH",
+          border: "border-orange-500/50",
+          fill: "bg-orange-500",
+          shadow: "shadow-[0_0_15px_rgba(249,115,22,0.4)]"
         };
       case "MEDIUM":
         return {
-          color: "bg-gradient-to-r from-yellow-500 to-yellow-600",
-          text: "text-yellow-700",
-          bg: "bg-yellow-50",
-          icon: <AlertTriangle className="w-4 h-4" />,
-          label: "Medium",
-          border: "border-yellow-200"
+          color: "text-yellow-500",
+          bg: "bg-yellow-950/40",
+          icon: <AlertTriangle className="w-5 h-5" />,
+          label: "MEDIUM",
+          border: "border-yellow-500/50",
+          fill: "bg-yellow-500",
+          shadow: "shadow-[0_0_15px_rgba(234,179,8,0.4)]"
         };
       case "LOW":
         return {
-          color: "bg-gradient-to-r from-blue-500 to-blue-600",
-          text: "text-blue-700",
-          bg: "bg-blue-50",
-          icon: <CheckCircle className="w-4 h-4" />,
-          label: "Low",
-          border: "border-blue-200"
+          color: "text-blue-400",
+          bg: "bg-blue-950/40",
+          icon: <CheckCircle className="w-5 h-5" />,
+          label: "LOW",
+          border: "border-blue-500/50",
+          fill: "bg-blue-500",
+          shadow: "shadow-[0_0_15px_rgba(59,130,246,0.4)]"
         };
       default:
         return {
-          color: "bg-gradient-to-r from-gray-500 to-gray-600",
-          text: "text-gray-700",
-          bg: "bg-gray-50",
-          icon: <CheckCircle className="w-4 h-4" />,
-          label: "Info",
-          border: "border-gray-200"
+          color: "text-zinc-400",
+          bg: "bg-zinc-900",
+          icon: <CheckCircle className="w-5 h-5" />,
+          label: "INFO",
+          border: "border-zinc-700",
+          fill: "bg-zinc-500",
+          shadow: ""
         };
     }
   };
@@ -280,139 +282,165 @@ useEffect(() => {
     a.click();
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
+  };
+
   return (
-    <div className="flex h-screen bg-transparent overflow-hidden">
+    <div className="flex h-screen bg-zinc-950 overflow-hidden text-slate-100 font-['Outfit']" suppressHydrationWarning>
       <OperatorSidebar />
 
-      <div className="flex-1 bg-transparent">
-        <div className="sticky top-0 z-20">
-          <Navbar title="👮 Operator Dashboard" />
-        </div>
+      <div className="flex-1 flex flex-col relative z-10 w-full overflow-y-auto custom-scrollbar">
+        <Navbar title="OPS_DASHBOARD" />
 
-        <div className="h-full overflow-y-auto">
-          <div className="p-6 space-y-6">
+        <div className="fixed inset-0 scanlines opacity-20 pointer-events-none"></div>
+
+        <div className="p-6 md:p-8 space-y-8 flex-1 w-full max-w-7xl mx-auto pb-20 relative z-10">
           {/* HEADER */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+          >
             <div>
-              <div className="app-badge">Operator workspace</div>
-              <h1 className="mt-3 text-2xl font-semibold text-slate-900">Incident Management</h1>
-              <p className="text-slate-600 mt-1">Monitor and respond to security incidents in real-time</p>
+              <div className="tech-badge mb-3">Operator Workspace</div>
+              <h1 className="text-2xl font-bold text-slate-100 tracking-wide uppercase">Incident Management</h1>
+              <p className="text-zinc-500 font-mono text-sm mt-1">Monitor and respond to security anomalies in real-time</p>
             </div>
             <button
               onClick={exportIncidents}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-300 text-slate-700 rounded-xl hover:bg-slate-50 transition-colors shadow-sm"
+              className="glass-button flex-items-center"
+              suppressHydrationWarning
             >
               <Download className="w-4 h-4" />
-              Export CSV
+              Export Telemetry
             </button>
-          </div>
+          </motion.div>
 
           {/* STATS CARDS */}
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
+          <motion.div 
+            className="grid grid-cols-2 lg:grid-cols-5 gap-4"
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+          >
+            <motion.div variants={itemVariants} className="glass-panel p-5">
+              <div className="flex items-center justify-between mb-2">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Incidents</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</p>
+                  <p className="text-[10px] font-mono leading-none tracking-widest text-zinc-500 uppercase">Total_Events</p>
+                  <p className="text-3xl font-bold text-slate-100 mt-2">{stats.total}</p>
                 </div>
-                <div className="p-3 bg-blue-50 rounded-xl">
-                  <BarChart3 className="w-6 h-6 text-blue-600" />
+                <div className="p-2.5 bg-cyan-900/30 rounded-lg border border-cyan-500/20">
+                  <Activity className="w-5 h-5 text-cyan-400" />
                 </div>
               </div>
-              <div className="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="mt-4 h-1 bg-zinc-800 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-blue-500 rounded-full" 
+                  className="h-full bg-cyan-500 shadow-[0_0_10px_#06b6d4]" 
                   style={{ width: `${stats.total > 0 ? 100 : 0}%` }}
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
+            <motion.div variants={itemVariants} className="glass-panel p-5 border-rose-500/20 bg-gradient-to-br from-zinc-900/50 to-rose-950/20">
+              <div className="flex items-center justify-between mb-2">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Critical</p>
-                  <p className="text-3xl font-bold text-red-600 mt-2">{stats.critical}</p>
+                  <p className="text-[10px] font-mono leading-none tracking-widest text-zinc-500 uppercase">Critical</p>
+                  <p className="text-3xl font-bold text-rose-500 mt-2 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]">{stats.critical}</p>
                 </div>
-                <div className="p-3 bg-red-50 rounded-xl">
-                  <ShieldAlert className="w-6 h-6 text-red-600" />
+                <div className="p-2.5 bg-rose-900/30 rounded-lg border border-rose-500/30">
+                  <ShieldAlert className="w-5 h-5 text-rose-500" />
                 </div>
               </div>
-              <div className="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="mt-4 h-1 bg-zinc-800 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-red-500 rounded-full" 
+                  className="h-full bg-rose-500 shadow-[0_0_10px_#f43f5e]" 
                   style={{ width: `${stats.total > 0 ? (stats.critical / stats.total) * 100 : 0}%` }}
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
+            <motion.div variants={itemVariants} className="glass-panel p-5 border-orange-500/20 bg-gradient-to-br from-zinc-900/50 to-orange-950/20">
+              <div className="flex items-center justify-between mb-2">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">High Priority</p>
-                  <p className="text-3xl font-bold text-orange-600 mt-2">{stats.high}</p>
+                  <p className="text-[10px] font-mono leading-none tracking-widest text-zinc-500 uppercase">High_Priority</p>
+                  <p className="text-3xl font-bold text-orange-500 mt-2 drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]">{stats.high}</p>
                 </div>
-                <div className="p-3 bg-orange-50 rounded-xl">
-                  <AlertTriangle className="w-6 h-6 text-orange-600" />
+                <div className="p-2.5 bg-orange-900/30 rounded-lg border border-orange-500/30">
+                  <AlertTriangle className="w-5 h-5 text-orange-500" />
                 </div>
               </div>
-              <div className="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="mt-4 h-1 bg-zinc-800 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-orange-500 rounded-full" 
+                  className="h-full bg-orange-500 shadow-[0_0_10px_#f97316]" 
                   style={{ width: `${stats.total > 0 ? (stats.high / stats.total) * 100 : 0}%` }}
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
+            <motion.div variants={itemVariants} className="glass-panel p-5 border-yellow-500/20 bg-gradient-to-br from-zinc-900/50 to-yellow-950/20">
+              <div className="flex items-center justify-between mb-2">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Medium</p>
-                  <p className="text-3xl font-bold text-yellow-600 mt-2">{stats.medium}</p>
+                  <p className="text-[10px] font-mono leading-none tracking-widest text-zinc-500 uppercase">Medium</p>
+                  <p className="text-3xl font-bold text-yellow-500 mt-2">{stats.medium}</p>
                 </div>
-                <div className="p-3 bg-yellow-50 rounded-xl">
-                  <AlertTriangle className="w-6 h-6 text-yellow-600" />
+                <div className="p-2.5 bg-yellow-900/30 rounded-lg border border-yellow-500/30">
+                  <AlertTriangle className="w-5 h-5 text-yellow-500" />
                 </div>
               </div>
-              <div className="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="mt-4 h-1 bg-zinc-800 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-yellow-500 rounded-full" 
+                  className="h-full bg-yellow-400 shadow-[0_0_10px_#facc15]" 
                   style={{ width: `${stats.total > 0 ? (stats.medium / stats.total) * 100 : 0}%` }}
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-              <div className="flex items-center justify-between">
+            <motion.div variants={itemVariants} className="glass-panel p-5 border-blue-500/20 bg-gradient-to-br from-zinc-900/50 to-blue-950/20">
+              <div className="flex items-center justify-between mb-2">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Low</p>
-                  <p className="text-3xl font-bold text-blue-600 mt-2">{stats.low}</p>
+                  <p className="text-[10px] font-mono leading-none tracking-widest text-zinc-500 uppercase">Low</p>
+                  <p className="text-3xl font-bold text-blue-400 mt-2">{stats.low}</p>
                 </div>
-                <div className="p-3 bg-blue-50 rounded-xl">
-                  <CheckCircle className="w-6 h-6 text-blue-600" />
+                <div className="p-2.5 bg-blue-900/30 rounded-lg border border-blue-500/30">
+                  <CheckCircle className="w-5 h-5 text-blue-400" />
                 </div>
               </div>
-              <div className="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="mt-4 h-1 bg-zinc-800 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-blue-500 rounded-full" 
+                  className="h-full bg-blue-500 shadow-[0_0_10px_#3b82f6]" 
                   style={{ width: `${stats.total > 0 ? (stats.low / stats.total) * 100 : 0}%` }}
                 />
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* FILTERS BAR */}
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            className="glass-panel p-5"
+          >
             <div className="flex flex-col lg:flex-row gap-4">
               {/* SEARCH */}
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-500 w-5 h-5" />
                   <input
                     type="text"
-                    placeholder="Search incidents by type, location, or severity..."
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all font-semibold text-gray-900 placeholder:font-semibold placeholder:text-gray-500"
+                    placeholder="Search query [type, location, severity]..."
+                    className="glass-input pl-10 h-[50px] font-mono text-sm"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    suppressHydrationWarning
                   />
                 </div>
               </div>
@@ -420,125 +448,123 @@ useEffect(() => {
               {/* FILTERS */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="relative">
-                  <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-500 w-4 h-4" />
                   <select
-                    className="pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none appearance-none bg-white min-w-[180px] font-semibold text-gray-900"
+                    className="glass-input pl-10 appearance-none min-w-[180px] h-[50px] font-mono text-xs uppercase"
                     value={cameraFilter}
                     onChange={(e) => setCameraFilter(e.target.value)}
+                    suppressHydrationWarning
                   >
-                    <option value="all">All Cameras</option>
+                    <option value="all" className="bg-zinc-900">All Nodes</option>
                     {getUniqueCameras().map((cam) => (
-                      <option key={cam} value={cam}>
-                        Camera {cam}
+                      <option key={cam} value={cam} className="bg-zinc-900">
+                        Node // {cam}
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div className="relative">
-                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-zinc-500 w-4 h-4" />
                   <select
-                    className="pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none appearance-none bg-white min-w-[180px] font-semibold text-gray-900"
+                    className="glass-input pl-10 appearance-none min-w-[180px] h-[50px] font-mono text-xs uppercase"
                     value={severityFilter}
                     onChange={(e) => setSeverityFilter(e.target.value)}
+                    suppressHydrationWarning
                   >
-                    <option value="all">All Severity</option>
-                    <option value="critical">Critical</option>
-                    <option value="high">High</option>
-                    <option value="medium">Medium</option>
-                    <option value="low">Low</option>
+                    <option value="all" className="bg-zinc-900">All Threat Lvls</option>
+                    <option value="critical" className="bg-zinc-900 text-rose-400">Critical</option>
+                    <option value="high" className="bg-zinc-900 text-orange-400">High</option>
+                    <option value="medium" className="bg-zinc-900 text-yellow-400">Medium</option>
+                    <option value="low" className="bg-zinc-900 text-blue-400">Low</option>
                   </select>
                 </div>
               </div>
             </div>
 
-            {/* ACTIVE FILTERS */}
+            {/* ACTIVE FILTERS (Chips) */}
             <div className="flex flex-wrap gap-2 mt-4">
+              <AnimatePresence>
               {cameraFilter !== "all" && (
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-800 rounded-lg text-sm font-semibold">
-                  <Camera className="w-3 h-3" />
-                  Camera {cameraFilter}
-                  <button 
-                    onClick={() => setCameraFilter("all")}
-                    className="ml-1 hover:text-blue-900"
-                  >
-                    ×
-                  </button>
-                </span>
+                <motion.span initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }} className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-900/30 text-cyan-300 border border-cyan-500/30 rounded-lg text-xs font-mono uppercase tracking-widest">
+                  <Camera className="w-3 h-3" /> NODE // {cameraFilter}
+                  <button onClick={() => setCameraFilter("all")} className="ml-1 hover:text-cyan-100 transition-colors">×</button>
+                </motion.span>
               )}
               {severityFilter !== "all" && (
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 text-purple-800 rounded-lg text-sm font-semibold">
-                  <Filter className="w-3 h-3" />
-                  {severityFilter.charAt(0).toUpperCase() + severityFilter.slice(1)}
-                  <button 
-                    onClick={() => setSeverityFilter("all")}
-                    className="ml-1 hover:text-purple-900"
-                  >
-                    ×
-                  </button>
-                </span>
+                <motion.span initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }} className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-900/30 text-purple-300 border border-purple-500/30 rounded-lg text-xs font-mono uppercase tracking-widest">
+                  <Filter className="w-3 h-3" /> THREAT // {severityFilter}
+                  <button onClick={() => setSeverityFilter("all")} className="ml-1 hover:text-purple-100 transition-colors">×</button>
+                </motion.span>
               )}
               {searchQuery && (
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 text-gray-800 rounded-lg text-sm font-semibold">
-                  <Search className="w-3 h-3" />
-                  "{searchQuery}"
-                  <button 
-                    onClick={() => setSearchQuery("")}
-                    className="ml-1 hover:text-gray-900"
-                  >
-                    ×
-                  </button>
-                </span>
+                <motion.span initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }} className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-800 text-zinc-300 border border-zinc-700 rounded-lg text-xs font-mono uppercase tracking-widest">
+                  <Search className="w-3 h-3" /> Q // {searchQuery}
+                  <button onClick={() => setSearchQuery("")} className="ml-1 hover:text-white transition-colors">×</button>
+                </motion.span>
               )}
+              </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
 
-          {/* INCIDENTS TABLE */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900">Recent Incidents</h2>
-                <span className="text-sm text-gray-600">
-                  {filteredIncidents.length} incident{filteredIncidents.length !== 1 ? 's' : ''} found
-                </span>
-              </div>
+          {/* INCIDENTS TABLE / LIST */}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+            className="glass-panel overflow-hidden"
+          >
+            <div className="px-6 py-4 border-b border-zinc-800/60 bg-zinc-900/30 flex items-center justify-between">
+              <h2 className="text-sm font-bold tracking-widest font-mono text-slate-100 flex items-center gap-2 uppercase">
+                <BarChart3 className="w-4 h-4 text-cyan-400" /> Event Logs
+              </h2>
+              <span className="text-xs font-mono text-zinc-500 px-2 py-1 bg-zinc-950 rounded border border-zinc-800">
+                {filteredIncidents.length} RECORDS
+              </span>
             </div>
 
             {loading ? (
-              <div className="p-12 text-center">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-                <p className="text-gray-600">Loading incidents...</p>
+              <div className="p-16 text-center flex flex-col items-center justify-center">
+                <div className="w-10 h-10 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <p className="text-zinc-500 font-mono tracking-widest text-xs">QUERYING DATABASE...</p>
               </div>
             ) : filteredIncidents.length === 0 ? (
-              <div className="p-12 text-center">
-                <div className="inline-block p-4 bg-gray-50 rounded-2xl mb-4">
-                  <AlertTriangle className="w-12 h-12 text-gray-400 mx-auto" />
+              <div className="p-16 text-center">
+                <div className="inline-flex p-4 bg-zinc-900 border border-zinc-800 rounded-full mb-4">
+                  <AlertTriangle className="w-8 h-8 text-zinc-600" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-700 mb-2">No incidents found</h3>
-                <p className="text-gray-500">Try adjusting your filters or search criteria</p>
+                <h3 className="text-sm font-bold text-zinc-400 tracking-widest font-mono uppercase mb-2">No Anomalies Found</h3>
+                <p className="text-zinc-600 text-sm">Review search parameters or wait for incoming telemetry.</p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-zinc-800/60">
                 {filteredIncidents.map((incident) => {
                   const severity = getSeverityInfo(incident.threat_level);
+                  
                   return (
-                    <div 
+                    <motion.div 
+                      initial={{ opacity: 0, backgroundColor: "transparent" }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      whileHover={{ backgroundColor: "rgba(39,39,42,0.4)" }}
                       key={incident.id} 
-                      className="p-6 hover:bg-gray-50 transition-colors cursor-pointer"
+                      className="p-6 transition-colors cursor-pointer group"
                       onClick={() => setSelectedIncident(incident)}
                     >
                       <div className="flex flex-col lg:flex-row gap-6">
                         {/* IMAGE */}
                         {incident.imageUrl && (
-                          <div className="lg:w-64 flex-shrink-0">
-                            <div className="relative aspect-video rounded-xl overflow-hidden shadow-md">
+                          <div className="lg:w-72 flex-shrink-0 relative">
+                            {/* HUD frame Corners */}
+                            <div className={`absolute top-0 left-0 w-3 h-3 border-t border-l ${severity.border} z-10`} />
+                            <div className={`absolute bottom-0 right-0 w-3 h-3 border-b border-r ${severity.border} z-10`} />
+                            
+                            <div className={`relative aspect-video bg-zinc-950 rounded border ${severity.border} overflow-hidden shadow-md`}>
                               <img
                                 src={incident.imageUrl}
                                 alt="Incident"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
                               />
-                              <div className="absolute top-3 right-3">
-                                <span className={`px-3 py-1.5 text-xs font-semibold text-white rounded-full ${severity.color}`}>
+                              <div className="absolute top-2 right-2">
+                                <span className={`px-2 py-1 text-[9px] font-mono tracking-widest font-bold border ${severity.border} ${severity.bg} ${severity.color} rounded backdrop-blur ${severity.shadow}`}>
                                   {severity.label}
                                 </span>
                               </div>
@@ -550,61 +576,65 @@ useEffect(() => {
                         <div className="flex-1">
                           <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
                             <div>
-                              <h3 className="text-xl font-bold text-gray-900">
+                              <h3 className="text-xl font-bold text-slate-100 uppercase tracking-wide flex items-center gap-2">
+                                {severity.icon}
                                 {getCrimeTypeDisplay(incident.crime_type)}
                               </h3>
-                              <div className="flex items-center gap-3 mt-2">
-                                <span className="flex items-center gap-1.5 text-sm text-gray-600">
-                                  <Clock className="w-4 h-4" />
+                              <div className="flex items-center gap-4 mt-2 font-mono text-xs">
+                                <span className="flex items-center gap-1.5 text-zinc-400">
+                                  <Clock className="w-3.5 h-3.5 text-cyan-500/70" />
                                   {formatDate(incident.createdAt)}
                                 </span>
-                                <span className="flex items-center gap-1.5 text-sm text-gray-600">
-                                  <MapPin className="w-4 h-4" />
-                                  {incident.location?.name || "Unknown Location"}
+                                <span className="flex items-center gap-1.5 text-zinc-400">
+                                  <MapPin className="w-3.5 h-3.5 text-purple-500/70" />
+                                  {incident.location?.name || "Unknown Zone"}
                                 </span>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2 mt-3 md:mt-0">
-                              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">
-                                <Eye className="w-5 h-5" />
+                            <div className="flex items-center gap-2 mt-3 md:mt-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button className="p-2 text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800 rounded-lg border border-transparent hover:border-zinc-700 transition">
+                                <Eye className="w-4 h-4" />
                               </button>
-                              <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">
-                                <MoreVertical className="w-5 h-5" />
+                              <button className="p-2 text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800 rounded-lg border border-transparent hover:border-zinc-700 transition">
+                                <MoreVertical className="w-4 h-4" />
                               </button>
                             </div>
                           </div>
 
                           {/* METRICS */}
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                            <div className={`p-4 rounded-xl border ${severity.border}`}>
-                              <p className="text-sm text-gray-600 mb-1">Confidence</p>
-                              <p className="text-2xl font-bold text-gray-900">
-                                {Math.round((incident.confidence || 0) * 100)}%
-                              </p>
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
+                            <div className={`px-4 py-3 rounded-lg border bg-zinc-950/40 ${severity.border}`}>
+                              <p className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 mb-1">Conf_Score</p>
+                              <div className="flex items-baseline gap-1">
+                                <p className={`text-xl font-bold ${severity.color}`}>
+                                  {Math.round((incident.confidence || 0) * 100)}
+                                </p>
+                                <span className="text-zinc-500 text-xs font-mono">%</span>
+                              </div>
                             </div>
-                            <div className="p-4 rounded-xl border border-gray-200">
-                              <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
-                                <Users className="w-4 h-4" />
-                                People Detected
+                            <div className="px-4 py-3 rounded-lg border border-zinc-800 bg-zinc-950/40">
+                              <p className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 mb-1 flex items-center gap-1">
+                                <Users className="w-3 h-3" /> Subjects
                               </p>
-                              <p className="text-2xl font-bold text-gray-900">
+                              <p className="text-xl font-bold text-slate-300">
                                 {incident.persons_detected || 0}
                               </p>
                             </div>
-                            <div className="p-4 rounded-xl border border-gray-200">
-                              <p className="text-sm text-gray-600 mb-1 flex items-center gap-1">
-                                <TrendingUp className="w-4 h-4" />
-                                Threat Score
+                            <div className="px-4 py-3 rounded-lg border border-zinc-800 bg-zinc-950/40">
+                              <p className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 mb-1 flex items-center gap-1">
+                                <TrendingUp className="w-3 h-3" /> Threat_Idx
                               </p>
-                              <p className="text-2xl font-bold text-gray-900">
-                                {Number(incident.threat_score) || 0}/100
-                              </p>
+                              <div className="flex items-baseline gap-1">
+                                <p className="text-xl font-bold text-slate-300">
+                                  {Number(incident.threat_score) || 0}
+                                </p>
+                                <span className="text-zinc-500 text-xs font-mono">/10</span>
+                              </div>
                             </div>
-                            <div className="p-4 rounded-xl border border-gray-200">
-                              <p className="text-sm text-gray-600 mb-1">Camera</p>
-                              <p className="text-lg font-semibold text-gray-900">
-                                {incident.location?.name || "Unknown Camera"}
-
+                            <div className="px-4 py-3 rounded-lg border border-zinc-800 bg-zinc-950/40">
+                              <p className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 mb-1">Node_ID</p>
+                              <p className="text-sm font-mono text-cyan-400 mt-1 truncate">
+                                {incident.location?.cameraId || "N/A"}
                               </p>
                             </div>
                           </div>
@@ -612,19 +642,18 @@ useEffect(() => {
                           {/* ACTIVITIES */}
                           {incident.activities && incident.activities.length > 0 && (
                             <div>
-                              <p className="text-sm font-medium text-gray-700 mb-2">Activities Detected</p>
                               <div className="flex flex-wrap gap-2">
                                 {incident.activities.slice(0, 5).map((activity, idx) => (
                                   <span
                                     key={idx}
-                                    className="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium"
+                                    className="px-2 py-1 bg-zinc-900 border border-zinc-700 text-cyan-100/70 rounded text-[10px] font-mono tracking-wider uppercase"
                                   >
                                     {activity.replace(/_/g, ' ')}
                                   </span>
                                 ))}
                                 {incident.activities.length > 5 && (
-                                  <span className="px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium">
-                                    +{incident.activities.length - 5} more
+                                  <span className="px-2 py-1 bg-zinc-900 border border-zinc-800 text-zinc-500 rounded text-[10px] font-mono tracking-wider uppercase">
+                                    +{incident.activities.length - 5} MORE
                                   </span>
                                 )}
                               </div>
@@ -632,22 +661,21 @@ useEffect(() => {
                           )}
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* SUMMARY */}
-          <div className="text-center text-sm text-gray-500 pt-2">
-            Showing {filteredIncidents.length} of {incidents.length} total incidents
+          <div className="text-center text-xs font-mono tracking-widest text-zinc-500 pt-2 pb-10">
+            DISPLAYING {filteredIncidents.length} / {incidents.length} RECORDS
             {incidents.length > 0 && (
-              <span className="ml-4">
-                Last updated {formatDate(new Date(Math.max(...incidents.map(i => i.createdAt?.getTime() || 0))))}
+              <span className="ml-4 border-l border-zinc-700 pl-4">
+                UPDATED {formatDate(new Date(Math.max(...incidents.map(i => i.createdAt?.getTime() || 0))))}
               </span>
             )}
-          </div>
           </div>
         </div>
       </div>

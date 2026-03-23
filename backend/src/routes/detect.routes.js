@@ -83,14 +83,32 @@ router.post("/image", upload.single("image"), async (req, res) => {
       contentType: req.file.mimetype,
     });
 
-    const aiRes = await axios.post(
-      "http://127.0.0.1:8000/detect-image",
-      formData,
-      {
-        headers: formData.getHeaders(),
-        timeout: 30000,
-      }
-    );
+    console.log("📤 Sending to AI server at http://127.0.0.1:8000/detect-image");
+    let aiRes;
+    try {
+      aiRes = await axios.post(
+        "http://127.0.0.1:8000/detect-image",
+        formData,
+        {
+          headers: formData.getHeaders(),
+          timeout: 30000,
+        }
+      );
+    } catch (aiError) {
+      console.error("❌ AI SERVER ERROR:", {
+        message: aiError.message,
+        code: aiError.code,
+        status: aiError.response?.status,
+        statusText: aiError.response?.statusText,
+        data: aiError.response?.data,
+      });
+      throw aiError;
+    }
+
+    console.log("✅ AI Response received:", {
+      status: aiRes.status,
+      dataKeys: Object.keys(aiRes.data || {}),
+    });
 
     const {
       type = "UNKNOWN",
@@ -107,6 +125,8 @@ router.post("/image", upload.single("image"), async (req, res) => {
       confidence,
       threat_level,
       persons_detected,
+      activities: activities.length,
+      signals: signals.length,
     });
 
     /* ---------- THREAT SCORE ---------- */
@@ -156,11 +176,22 @@ router.post("/image", upload.single("image"), async (req, res) => {
       data: incidentData,
     });
   } catch (err) {
-    console.error("❌ IMAGE DETECT ERROR:", err);
+    console.error("❌ IMAGE DETECT ERROR:", {
+      message: err.message,
+      code: err.code,
+      axiosStatus: err.response?.status,
+      axiosData: err.response?.data,
+      stack: err.stack.split('\n').slice(0, 5).join('\n'),
+    });
 
-    return res.status(500).json({
+    const errorMessage = err.response?.data?.message 
+      || err.message 
+      || "Crime detection failed";
+
+    return res.status(err.response?.status || 500).json({
       success: false,
-      message: "Crime detection failed",
+      message: errorMessage,
+      error: process.env.NODE_ENV === 'development' ? err.message : undefined,
     });
   }
 });

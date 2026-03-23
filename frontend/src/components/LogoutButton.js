@@ -26,6 +26,7 @@ export default function LogoutButton() {
     <button
       onClick={handleLogout}
       className="app-button"
+      suppressHydrationWarning
     >
       Logout
     </button>

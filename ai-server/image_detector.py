@@ -103,6 +103,7 @@ def analyze_image(image):
     Runs pose-based crime detection with preprocessing
     """
     if pose_detector is None:
+        print("❌ Pose detector not initialized")
         return {
             "type": "SYSTEM_ERROR",
             "confidence": 0.0,
@@ -116,9 +117,11 @@ def analyze_image(image):
     try:
         # Preprocess image
         processed_image = preprocess_image(image)
+        print(f"📸 Processing image: shape={processed_image.shape}")
         
         # Run detection
         result = pose_detector.analyze(processed_image)
+        print(f"🔍 Detection result: type={result.get('crime_type')}, persons={result.get('persons_detected')}, confidence={result.get('confidence')}")
         
         confidence = normalize_confidence(
             result.get("confidence", 0.0)
@@ -245,6 +248,8 @@ def detect_image():
         
         # Run detection
         detection = analyze_image(image)
+        
+        print(f"✅ Analysis complete: {detection.get('crime_type')} (confidence: {detection.get('confidence')})")
         
         # Clean up temp file
         try:
