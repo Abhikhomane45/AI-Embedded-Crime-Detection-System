@@ -125,13 +125,16 @@ export default function OperatorIncidentsPage() {
     <div className="flex h-screen bg-zinc-950 font-['Outfit'] text-slate-100 overflow-hidden" suppressHydrationWarning>
       <OperatorSidebar />
 
-      <div className="flex-1 flex flex-col relative z-10 w-full overflow-y-auto custom-scrollbar">
-        <Navbar title="INCIDENT_Q" />
+      <div className="flex-1 flex flex-col relative w-full overflow-y-auto custom-scrollbar">
+        <div className="sticky top-0 z-20">
+          <Navbar title="INCIDENT_Q" />
+        </div>
 
-        <div className="fixed inset-0 scanlines opacity-20 pointer-events-none"></div>
+        <div className="fixed inset-0 scanlines opacity-20 pointer-events-none z-0"></div>
 
         <div className="p-6 md:p-8 flex-1 w-full max-w-5xl mx-auto relative z-10 pb-20">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+            <div className="tech-badge w-fit mb-3 text-rose-500 border-rose-500/50 bg-rose-950/30">Action Queue</div>
             <h2 className="text-2xl font-bold text-slate-100 uppercase tracking-wide flex items-center gap-3">
               <AlertCircle className="w-6 h-6 text-rose-500" /> Response Queue
             </h2>

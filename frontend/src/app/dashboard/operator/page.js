@@ -299,10 +299,12 @@ export default function OperatorDashboard() {
     <div className="flex h-screen bg-zinc-950 overflow-hidden text-slate-100 font-['Outfit']" suppressHydrationWarning>
       <OperatorSidebar />
 
-      <div className="flex-1 flex flex-col relative z-10 w-full overflow-y-auto custom-scrollbar">
-        <Navbar title="OPS_DASHBOARD" />
+      <div className="flex-1 flex flex-col relative w-full overflow-y-auto custom-scrollbar">
+        <div className="sticky top-0 z-20">
+          <Navbar title="OPS_DASHBOARD" />
+        </div>
 
-        <div className="fixed inset-0 scanlines opacity-20 pointer-events-none"></div>
+        <div className="fixed inset-0 scanlines opacity-20 pointer-events-none z-0"></div>
 
         <div className="p-6 md:p-8 space-y-8 flex-1 w-full max-w-7xl mx-auto pb-20 relative z-10">
           {/* HEADER */}

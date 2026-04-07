@@ -135,12 +135,19 @@ export default function SurveillancePage() {
       firstCanvas.height = h;
       const ctx = firstCanvas.getContext("2d");
       
-      // Draw grid line effects on canvas for that "tech" look
-      ctx.drawImage(imgRef.current, 0, 0, w, h);
+      // Draw clean image first (rotate 180 degrees to upright)
+      ctx.save();
+      ctx.translate(w / 2, h / 2);
+      ctx.rotate(Math.PI);
+      ctx.drawImage(imgRef.current, -w / 2, -h / 2, w, h);
+      ctx.restore();
+      
+      // Capture clean image for AI detection
+      snapshotUrl = firstCanvas.toDataURL("image/jpeg", 0.8);
+
+      // Now add grid line effects on canvas for that "tech" look in the UI
       ctx.fillStyle = "rgba(6,182,212,0.1)";
       for(let y=0; y<h; y+=20) ctx.fillRect(0, y, w, 1);
-      
-      snapshotUrl = firstCanvas.toDataURL("image/jpeg", 0.8);
     }
 
     if (captureCount.current < MAX_IMAGES) {
@@ -204,8 +211,10 @@ export default function SurveillancePage() {
     <div className="flex bg-zinc-950 min-h-screen text-slate-100 font-['Outfit'] relative overflow-hidden" suppressHydrationWarning>
 
       <AdminSidebar />
-      <div className="flex-1 flex flex-col z-10 w-full overflow-y-auto custom-scrollbar">
-        <Navbar title="LIVE_FEED // ESP32" />
+      <div className="flex-1 flex flex-col relative w-full overflow-y-auto custom-scrollbar">
+        <div className="sticky top-0 z-20">
+          <Navbar title="LIVE_FEED // ESP32" />
+        </div>
 
         <div className="fixed inset-0 scanlines opacity-30 pointer-events-none z-0"></div>
 
@@ -434,7 +443,7 @@ export default function SurveillancePage() {
                       <div key={i} className={`relative overflow-hidden rounded-lg aspect-video border ${i === 0 ? 'border-cyan-500/50 opacity-100' : 'border-zinc-800 opacity-60 grayscale-[50%] hover:opacity-100 hover:grayscale-0'} transition-all duration-300`} style={{ display: i < capturesLength ? 'block' : 'none' }}>
                          <canvas
                            ref={(el) => canvasRefs.current[i] = el}
-                           className="w-full h-full object-cover bg-zinc-900 transform rotate-180 block"
+                           className="w-full h-full object-cover bg-zinc-900 block"
                          />
                          {i === 0 && (
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-zinc-950 to-transparent p-2 text-[9px] font-mono text-cyan-400 tracking-widest">

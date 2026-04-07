@@ -6,6 +6,8 @@ import { db, auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import dynamic from "next/dynamic";
 import { Activity } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import AdminSidebar from "@/components/AdminSidebar";
 
 // ✅ Client-only charts
 const AnalyticsCharts = dynamic(
@@ -103,11 +105,17 @@ export default function Analytics() {
 
   return (
     <div className="flex h-screen bg-zinc-950 font-['Outfit'] text-slate-100 overflow-hidden" suppressHydrationWarning>
-      <div className="flex-1 flex flex-col relative z-10 w-full overflow-y-auto custom-scrollbar">
-        <div className="fixed inset-0 scanlines opacity-20 pointer-events-none"></div>
+      <AdminSidebar />
+      <div className="flex-1 flex flex-col relative w-full overflow-y-auto custom-scrollbar">
+        <div className="sticky top-0 z-20">
+          <Navbar title="SYSTEM_ANALYTICS" />
+        </div>
+        
+        <div className="fixed inset-0 scanlines opacity-20 pointer-events-none z-0"></div>
 
-        <div className="mx-auto max-w-7xl w-full px-6 py-8 relative z-10">
+        <div className="p-6 md:p-8 max-w-7xl mx-auto w-full relative z-10">
           <div className="mb-8 flex flex-col items-start gap-4">
+            <div className="tech-badge w-fit mb-1">Data Layer</div>
             <h1 className="text-2xl font-bold text-slate-100 uppercase tracking-wide flex items-center gap-3">
               <Activity className="w-6 h-6 text-cyan-400" /> Operational Insights
             </h1>

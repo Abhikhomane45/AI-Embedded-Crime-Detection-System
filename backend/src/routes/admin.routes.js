@@ -274,4 +274,15 @@ router.post("/_make-operator", async (req, res) => {
 });
 
 
+router.get("/operators-list", verifyToken, requireAdmin, async (req, res) => {
+  try {
+    const snap = await admin.firestore().collection("operators").get();
+    const operators = snap.docs.map(doc => ({ uid: doc.id, ...doc.data() }));
+    res.json({ success: true, operators });
+  } catch (err) {
+    console.error("FETCH OPERATORS ERROR:", err);
+    res.status(500).json({ success: false, message: "Failed to fetch operators list" });
+  }
+});
+
 module.exports = router;

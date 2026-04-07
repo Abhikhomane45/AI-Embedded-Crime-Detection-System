@@ -118,6 +118,7 @@ router.post("/image", upload.single("image"), async (req, res) => {
       activities = [],
       signals = [],
       timestamp = null,
+      crime_detected = false,
     } = aiRes.data || {};
 
     console.log("🧠 AI RESULT:", {
@@ -127,6 +128,7 @@ router.post("/image", upload.single("image"), async (req, res) => {
       persons_detected,
       activities: activities.length,
       signals: signals.length,
+      crime_detected,
     });
 
     /* ---------- THREAT SCORE ---------- */
@@ -157,6 +159,7 @@ router.post("/image", upload.single("image"), async (req, res) => {
       signals,
 
       location, // ✅ ALWAYS CONSISTENT
+      crime_detected: Boolean(crime_detected),
 
       imageUrl: uploadRes.secure_url,
 

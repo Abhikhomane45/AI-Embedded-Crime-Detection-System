@@ -185,11 +185,10 @@ export default function ManageCameras() {
                       </td>
                       <td className="p-4 text-center">
                         <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono tracking-widest uppercase rounded border ${
-                            cam.active
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono tracking-widest uppercase rounded border ${cam.active
                               ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
                               : "bg-rose-500/10 border-rose-500/30 text-rose-400"
-                          }`}
+                            }`}
                         >
                           {cam.active ? (
                             <><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981] animate-pulse"></div> ONLINE</>
@@ -242,13 +241,13 @@ export default function ManageCameras() {
         {/* MODAL */}
         <AnimatePresence>
           {showModal && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             >
-              <motion.div 
-                initial={{ scale: 0.95, opacity: 0, y: 20 }} 
-                animate={{ scale: 1, opacity: 1, y: 0 }} 
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
                 className="glass-panel w-full max-w-[420px] p-6 border-cyan-500/30 shadow-[0_0_40px_rgba(6,182,212,0.1)]"
               >
@@ -257,7 +256,7 @@ export default function ManageCameras() {
                     {editingId ? "Reconfigure Node" : "Provision Node"}
                   </h3>
                   <button onClick={() => setShowModal(false)} className="text-zinc-500 hover:text-rose-400 transition">
-                     <X className="w-5 h-5" />
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
 

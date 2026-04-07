@@ -74,11 +74,11 @@ export default function AdminSidebar() {
             <span className="relative z-10 font-medium tracking-wide text-sm">Live Monitoring</span>
           </Link>
 
-          <Link href="/dashboard/admin/analytics" className={navItemClass(isActive("/dashboard/admin/analytics"))}>
-            {isActive("/dashboard/admin/analytics") && (
+          <Link href="/analytics" className={navItemClass(isActive("/analytics"))}>
+            {isActive("/analytics") && (
               <motion.div layoutId="admin-active-bg" className="absolute inset-0 bg-cyan-600/10 rounded-xl" />
             )}
-            <BarChart3 className={iconClass(isActive("/dashboard/admin/analytics"))} />
+            <BarChart3 className={iconClass(isActive("/analytics"))} />
             <span className="relative z-10 font-medium tracking-wide text-sm">Analytics</span>
           </Link>
 
